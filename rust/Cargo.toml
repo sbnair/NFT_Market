@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "token-metadata/program",
+  "token-metadata/test",
+]
+exclude = [
+]
