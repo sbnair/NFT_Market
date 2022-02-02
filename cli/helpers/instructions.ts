@@ -14,7 +14,7 @@ import {
 } from './constants';
 import * as anchor from '@project-serum/anchor';
 
-export function createHeroMetadataInstruction(
+export function createNFTMetadataInstruction(
   metadataAccount: PublicKey,
   payer: PublicKey,
   txnData: Buffer,
@@ -49,7 +49,7 @@ export function createHeroMetadataInstruction(
   });
 }
 
-export function updateHeroMetadataInstruction(
+export function updateNFTMetadataInstruction(
   metadataAccount: PublicKey,
   payer: PublicKey,
   tokenAccount: PublicKey,
@@ -80,7 +80,7 @@ export function updateHeroMetadataInstruction(
   });
 }
 
-export function purchaseHeroInstruction(
+export function purchaseNFTInstruction(
   metadataAccount: PublicKey,
   payer: PublicKey,
   tokenOwnerAddress: PublicKey,

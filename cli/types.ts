@@ -166,7 +166,7 @@ export class Metadata {
   }
 }
 
-export class Herodata {
+export class NFTdata {
   id: number;
   name: string;
   uri: string;
@@ -192,7 +192,7 @@ export class Herodata {
 
 export const METADATA_SCHEMA = new Map<any, any>([
   [
-    Herodata,
+    NFTdata,
     {
       kind: 'struct',
       fields: [

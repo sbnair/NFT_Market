@@ -220,7 +220,7 @@ export const getMetadata = async (
   )[0];
 };
 
-export const getHeroDataKey = async (
+export const getNFTDataKey = async (
   id: number,
   programId: PublicKey,
 ): Promise<anchor.web3.PublicKey> => {

@@ -61,7 +61,7 @@ export class CreateMasterEditionArgs {
   }
 }
 
-export class Herodata {
+export class NFTdata {
   id: number;
   name: string;
   uri: string;
@@ -85,18 +85,18 @@ export class Herodata {
   }
 }
 
-export class CreateHeroMetadataArgs {
+export class CreateNFTMetadataArgs {
   ins_no: number;
-  data: Herodata;
+  data: NFTdata;
   id: number;
-  constructor(args: { data: Herodata, id: number }) {
+  constructor(args: { data: NFTdata, id: number }) {
     this.ins_no = 0;
     this.data = args.data;
     this.id = args.id;
   }
 }
 
-export class UpdateHeroMetadataArgs {
+export class UpdateNFTMetadataArgs {
   id: number;
   price: BN;
   ins_no: number;
@@ -107,7 +107,7 @@ export class UpdateHeroMetadataArgs {
   }
 }
 
-export class PurchaseHeroArgs {
+export class PurchaseNFTArgs {
   id: number;
   new_price: BN | null;
   new_name: string | null;
@@ -124,18 +124,18 @@ export class PurchaseHeroArgs {
 
 export const METADATA_SCHEMA = new Map<any, any>([
   [
-    CreateHeroMetadataArgs,
+    CreateNFTMetadataArgs,
     {
       kind: 'struct',
       fields: [
         ['ins_no', 'u8'],
-        ['data', Herodata],
+        ['data', NFTdata],
         ['id', 'u8'],
       ],
     },
   ],
   [
-    UpdateHeroMetadataArgs,
+    UpdateNFTMetadataArgs,
     {
       kind: 'struct',
       fields: [
@@ -146,7 +146,7 @@ export const METADATA_SCHEMA = new Map<any, any>([
     },
   ],
   [
-    PurchaseHeroArgs,
+    PurchaseNFTArgs,
     {
       kind: 'struct',
       fields: [
@@ -159,7 +159,7 @@ export const METADATA_SCHEMA = new Map<any, any>([
     },
   ],
   [
-    Herodata,
+    NFTdata,
     {
       kind: 'struct',
       fields: [
