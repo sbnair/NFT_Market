@@ -1,14 +1,14 @@
 import {
-  updateHeroMetadataInstruction,
+  updateNFTMetadataInstruction,
 } from '../helpers/instructions';
 import { sendTransactionWithRetryWithKeypair } from '../helpers/transactions';
 import {
-  getHeroDataKey,
+  getNFTDataKey,
 } from '../helpers/accounts';
 import * as anchor from '@project-serum/anchor';
 import {
-  Herodata,
-  UpdateHeroMetadataArgs,
+  NFTdata,
+  UpdateNFTMetadataArgs,
   METADATA_SCHEMA,
 } from '../helpers/schema';
 import { serialize } from 'borsh';
@@ -24,14 +24,14 @@ import {
 import BN from 'bn.js';
 import log from 'loglevel';
 
-export const updateHero = async (
+export const updateNFT = async (
   connection: Connection,
-  heroProgramAddress: string,
+  nftProgramAddress: string,
   walletKeypair: Keypair,
   id: number,
   price: number,
 ): Promise<void> => {
-  // Validate heroData
+  // Validate nftData
   if (
     isNaN(price)
   ) {
@@ -44,18 +44,18 @@ export const updateHero = async (
   const wallet = new anchor.Wallet(walletKeypair);
   if (!wallet?.publicKey) return;
 
-  const programId = new PublicKey(heroProgramAddress);
+  const programId = new PublicKey(nftProgramAddress);
   
   const instructions: TransactionInstruction[] = [];
   const signers: anchor.web3.Keypair[] = [walletKeypair];
 
   // Update metadata
-  let herodataAccount = await getHeroDataKey(id, programId);
-  log.info(`Generated test account: ${herodataAccount}`);
+  let nftdataAccount = await getNFTDataKey(id, programId);
+  log.info(`Generated test account: ${nftdataAccount}`);
   
   const result = await getProgramAccounts(
     connection,
-    heroProgramAddress,
+    nftProgramAddress,
     {},
   );
   const count = result.length;
@@ -66,10 +66,10 @@ export const updateHero = async (
   }
 
   let ownerNftAddress: PublicKey;
-  for(let hero of result) {
-    const accountPubkey = hero.pubkey;
-    if (accountPubkey == herodataAccount.toBase58()) {
-      const decoded: Herodata = await decodeHeroMetadata(hero.account.data);
+  for(let nft of result) {
+    const accountPubkey = nft.pubkey;
+    if (accountPubkey == nftdataAccount.toBase58()) {
+      const decoded: NFTdata = await decodeNFTMetadata(nft.account.data);
       ownerNftAddress = new PublicKey(decoded.ownerNftAddress);
       break;
     }
@@ -109,13 +109,13 @@ export const updateHero = async (
   let txnData = Buffer.from(
     serialize(
       METADATA_SCHEMA,
-      new UpdateHeroMetadataArgs({ id, price: new BN(price) }),
+      new UpdateNFTMetadataArgs({ id, price: new BN(price) }),
     ),
   );
   
   instructions.push(
-    updateHeroMetadataInstruction(
-      herodataAccount,
+    updateNFTMetadataInstruction(
+      nftdataAccount,
       wallet.publicKey,
       new PublicKey(accountPubkey),
       txnData,

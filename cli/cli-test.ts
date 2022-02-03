@@ -5,11 +5,11 @@ import { program } from 'commander';
 import log from 'loglevel';
 import { web3 } from '@project-serum/anchor';
 
-import { createNewHero } from './commands/createHero';
-import { updateHero } from './commands/updateHero';
-import { purchaseNFT } from './commands/purchaseHero';
+import { createNewNFT } from './commands/createNFT';
+import { updateNFT } from './commands/updateNFT';
+import { purchaseNFT } from './commands/purchaseNFT';
 import { upload } from './commands/upload';
-import { getAllHeros } from './commands/fetchAll';
+import { getAllNFTs } from './commands/fetchAll';
 
 import { loadWalletKey } from './helpers/accounts';
 import {
@@ -54,7 +54,7 @@ programCommand('create_test')
     }
     const walletKeyPair = loadWalletKey(keypair);
     log.info(`create_test: n-${name}, u-${uri}, p-${parsedPrice}, o-${owner}`);
-    await createNewHero(solConnection, programId, walletKeyPair, {name, uri, price: parsedPrice, ownerNftAddress: owner});
+    await createNewNFT(solConnection, programId, walletKeyPair, {name, uri, price: parsedPrice, ownerNftAddress: owner});
   });
 
 programCommand('show_all')
@@ -71,8 +71,8 @@ programCommand('show_all')
       throw new Error(`Test Program Id is not provided in .env file`);
     }
     log.info(`show_all: e-${env} env-${programId}`);
-    const heroList = await getAllHeros(solConnection, programId);
-    log.info(heroList);
+    const nftList = await getAllNFTs(solConnection, programId);
+    log.info(nftList);
   });
 
 programCommand('update_test_price')
@@ -99,7 +99,7 @@ programCommand('update_test_price')
     }
     const walletKeyPair = loadWalletKey(keypair);
     log.info(`update_test_price: i-${id}, p-${parsedPrice}`);
-    await updateHero(solConnection, programId, walletKeyPair, id, parsedPrice);
+    await updateNFT(solConnection, programId, walletKeyPair, id, parsedPrice);
   });
 
 programCommand('buy_test')

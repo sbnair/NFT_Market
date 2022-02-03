@@ -4,7 +4,7 @@ import {
   PublicKey,
 } from '@solana/web3.js';
 import * as borsh from 'borsh';
-import { AccountAndPubkey, Herodata, Metadata, METADATA_SCHEMA } from '../types';
+import { AccountAndPubkey, NFTdata, Metadata, METADATA_SCHEMA } from '../types';
 import log from 'loglevel';
 
 /*
@@ -15,7 +15,7 @@ import log from 'loglevel';
 
  PS: Don't sign candy machine addresses that you do not know about. Signing verifies your participation.
 */
-export async function getAllHeros(
+export async function getAllNFTs(
   connection: Connection,
   heroProgramAddress: string,
 ) {
@@ -27,7 +27,7 @@ export async function getAllHeros(
   log.info(`Fetched test counts: ${result.length}`);
   let heroList = [];
   for(let hero of result) {
-    const decoded = await decodeHeroMetadata(hero.account.data);
+    const decoded = await decodeNFTMetadata(hero.account.data);
     let metadata = {};
     metadata['id'] = decoded.id;
     metadata['lastPrice'] = decoded.lastPrice.toString();
