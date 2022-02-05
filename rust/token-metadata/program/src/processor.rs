@@ -3,7 +3,7 @@ use {
         error::MetadataError,
         instruction::MetadataInstruction,
         state::{
-            HeroData,
+            NFTData,
             // Key, MasterEditionV1, MasterEditionV2, MAX_MASTER_EDITION_LEN,
             PREFIX,
             // Metadata, EDITION,
@@ -15,12 +15,12 @@ use {
             // assert_token_program_matches_package,
             // create_or_allocate_account_raw, get_owner_from_token_account,
             process_create_metadata_accounts_logic,
-            process_purchase_hero_logic,
+            process_purchase_nft_logic,
             // assert_update_authority_is_correct,
             // process_mint_new_edition_from_master_edition_via_token_logic,
             // transfer_mint_authority,
             CreateMetadataAccountsLogicArgs,
-            PurchaseHeroLogicArgs,
+            PurchaseNFTLogicArgs,
             // puff_out_data_fields,
             // MintNewEditionFromMasterEditionViaTokenLogicArgs,
         },
@@ -54,18 +54,18 @@ pub fn process_instruction<'a>(
                 args.id,
             )
         }
-        MetadataInstruction::UpdateHeroPrice(args) => {
-            msg!("Instruction: Update Hero Price from Id");
-            process_update_hero_price(
+        MetadataInstruction::UpdateNFTPrice(args) => {
+            msg!("Instruction: Update NFT Price from Id");
+            process_update_nft_price(
                 program_id,
                 accounts,
                 args.id,
                 args.price,
             )
         }
-        MetadataInstruction::PurchaseHero(args) => {
-            msg!("Instruction: Purchase Hero from Id");
-            process_purchase_hero(
+        MetadataInstruction::PurchaseNFT(args) => {
+            msg!("Instruction: Purchase NFT from Id");
+            process_purchase_nft(
                 program_id,
                 accounts,
                 args.id,
@@ -80,7 +80,7 @@ pub fn process_instruction<'a>(
 pub fn process_create_metadata_accounts<'a>(
     program_id: &'a Pubkey,
     accounts: &'a [AccountInfo<'a>],
-    data: HeroData,
+    data: NFTData,
     id: u8,
 ) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
@@ -102,8 +102,8 @@ pub fn process_create_metadata_accounts<'a>(
     )
 }
 
-/// Purchase hero from id instruction
-pub fn process_purchase_hero<'a>(
+/// Purchase nft from id instruction
+pub fn process_purchase_nft<'a>(
     program_id: &'a Pubkey,
     accounts: &'a [AccountInfo<'a>],
     id: u8,
@@ -112,7 +112,7 @@ pub fn process_purchase_hero<'a>(
     price: Option<u64>,
 ) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
-    let herodata_account_info = next_account_info(account_info_iter)?;
+    let nftdata_account_info = next_account_info(account_info_iter)?;
     let payer_account_info = next_account_info(account_info_iter)?;
     let nft_owner_address_info = next_account_info(account_info_iter)?;
     let nft_account_info = next_account_info(account_info_iter)?;
@@ -120,10 +120,10 @@ pub fn process_purchase_hero<'a>(
     let system_account_info = next_account_info(account_info_iter)?;
     let rent_info = next_account_info(account_info_iter)?;
 
-    process_purchase_hero_logic(
+    process_purchase_nft_logic(
         &program_id,
-        PurchaseHeroLogicArgs {
-            herodata_account_info,
+        PurchaseNFTLogicArgs {
+            nftdata_account_info,
             payer_account_info,
             nft_owner_address_info,
             nft_account_info,
@@ -138,11 +138,11 @@ pub fn process_purchase_hero<'a>(
     )
 }
 
-/// Update existing hero price instruction
-pub fn process_update_hero_price(
+/// Update existing nft price instruction
+pub fn process_update_nft_price(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
-    hero_id: u8,
+    nft_id: u8,
     new_price: u64,
 ) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
@@ -152,18 +152,18 @@ pub fn process_update_hero_price(
     let metadata_seeds = &[
         PREFIX.as_bytes(),
         program_id.as_ref(),
-        &[hero_id],
+        &[nft_id],
     ];
     let (metadata_key, _) =
         Pubkey::find_program_address(metadata_seeds, program_id);
     if *metadata_account_info.key != metadata_key {
-        msg!("----> Error: mismatch with hero id and parsed hero account");
+        msg!("----> Error: mismatch with nft id and parsed hero account");
         return Err(MetadataError::InvalidMetadataKey.into());
     }
 
     assert_owned_by(metadata_account_info, program_id)?;
 
-    let mut metadata = HeroData::from_account_info(metadata_account_info)?;
+    let mut metadata = NFTData::from_account_info(metadata_account_info)?;
     let token_account: Account = assert_initialized(&owner_nft_token_account_info)?;
     msg!("--> retrived: {}, generated: {}", metadata.owner_nft_address, token_account.mint);
 
@@ -171,7 +171,7 @@ pub fn process_update_hero_price(
     if metadata.owner_nft_address !=  token_account.mint {
         return Err(MetadataError::OwnerMismatch.into());
     }
-    msg!("---> Hero Onwer address: {}, Retrieved: {}", owner_account_info.key, token_account.owner);
+    msg!("---> NFT Onwer address: {}, Retrieved: {}", owner_account_info.key, token_account.owner);
     let token_account: Account = assert_initialized(&owner_nft_token_account_info)?;
     if token_account.owner != *owner_account_info.key {
         return Err(MetadataError::InvalidOwner.into());

@@ -1,7 +1,7 @@
 use {
     crate::{
         // deprecated_instruction::{MintPrintingTokensViaTokenArgs, SetReservationListArgs},
-        state::{ HeroData,
+        state::{ NFTData,
             // Creator, 
             // EDITION, EDITION_MARKER_BIT_SIZE, PREFIX
         },
@@ -28,7 +28,7 @@ use {
 /// Args for create call
 pub struct CreateMetadataAccountArgs {
     /// Note that unique metadatas are disabled for now.
-    pub data: HeroData,
+    pub data: NFTData,
     /// Whether you want your metadata to be updateable in the future.
     // pub is_mutable: bool,
     pub id: u8,
@@ -36,15 +36,15 @@ pub struct CreateMetadataAccountArgs {
 
 #[repr(C)]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
-pub struct UpdateHeroPriceArgs {
-    /// Update price of Hero from Id for it's owner.
+pub struct UpdateNFTPriceArgs {
+    /// Update price of NFT from Id for it's owner.
     pub id: u8,
     pub price: u64,
 }
 
 #[repr(C)]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
-pub struct PurchaseHeroArgs {
+pub struct PurchaseNFTArgs {
     pub id: u8,
     pub new_name: Option<String>,
     pub new_uri: Option<String>,
@@ -64,7 +64,7 @@ pub enum MetadataInstruction {
     ///   6. `[]` Rent info
     CreateMetadataAccount(CreateMetadataAccountArgs),
     
-    /// Update price of Hero from Id.
+    /// Update price of NFT from Id.
     ///   0. `[writable]`  Metadata key (pda of ['metadata', program id, mint id])
     ///   1. `[]` Mint of token asset
     ///   2. `[signer]` Mint authority
@@ -72,9 +72,9 @@ pub enum MetadataInstruction {
     ///   4. `[]` update authority info
     ///   5. `[]` System program
     ///   6. `[]` Rent info
-    UpdateHeroPrice(UpdateHeroPriceArgs),
+    UpdateNFTPrice(UpdateNFTPriceArgs),
 
-    /// Update price of Hero from Id.
+    /// Update price of NFT from Id.
     ///   0. `[writable]`  Metadata key (pda of ['metadata', program id, mint id])
     ///   1. `[]` Mint of token asset
     ///   2. `[signer]` Mint authority
@@ -82,7 +82,7 @@ pub enum MetadataInstruction {
     ///   4. `[]` update authority info
     ///   5. `[]` System program
     ///   6. `[]` Rent info
-    PurchaseHero(PurchaseHeroArgs),
+    PurchaseNFT(PurchaseNFTArgs),
 /*
     /// Update a Metadata
     ///   0. `[writable]` Metadata account
@@ -306,7 +306,7 @@ pub fn create_metadata_accounts(
             AccountMeta::new_readonly(sysvar::rent::id(), false),
         ],
         data: MetadataInstruction::CreateMetadataAccount(CreateMetadataAccountArgs {
-            data: HeroData {
+            data: NFTData {
                 id,
                 name,
                 uri,
@@ -321,8 +321,8 @@ pub fn create_metadata_accounts(
     }
 }
 
-/// update hero price instruction
-pub fn update_hero_price(
+/// update nft price instruction
+pub fn update_nft_price(
     program_id: Pubkey,
     metadata_account: Pubkey,
     id: u8,
@@ -337,7 +337,7 @@ pub fn update_hero_price(
             AccountMeta::new_readonly(owner, true),
             AccountMeta::new_readonly(owner_nft_token_account, false),
         ],
-        data: MetadataInstruction::UpdateHeroPrice(UpdateHeroPriceArgs {
+        data: MetadataInstruction::UpdateNFTPrice(UpdateNFTPriceArgs {
             id,
             price: new_price,
         })
@@ -346,8 +346,8 @@ pub fn update_hero_price(
     }
 }
 
-/// purchase hero instruction
-pub fn purchase_hero(
+/// purchase nft instruction
+pub fn purchase_nft(
     program_id: Pubkey,
     metadata_account: Pubkey,
     id: u8,
@@ -370,7 +370,7 @@ pub fn purchase_hero(
             AccountMeta::new_readonly(solana_program::system_program::id(), false),
             AccountMeta::new_readonly(sysvar::rent::id(), false),
         ],
-        data: MetadataInstruction::PurchaseHero(PurchaseHeroArgs {
+        data: MetadataInstruction::PurchaseNFT(PurchaseNFTArgs {
             id,
             new_name,
             new_uri,

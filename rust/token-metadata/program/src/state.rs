@@ -67,7 +67,7 @@ pub const MAX_DATA_SIZE: usize =
 
 #[repr(C)]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
-pub struct HeroData {
+pub struct NFTData {
     /// The id for the asset
     pub id: u8,
     /// The name of the asset
@@ -82,9 +82,9 @@ pub struct HeroData {
     pub owner_nft_address: Pubkey,
 }
 
-impl HeroData {
-    pub fn from_account_info(a: &AccountInfo) -> Result<HeroData, ProgramError> {
-        let md: HeroData =
+impl NFTData {
+    pub fn from_account_info(a: &AccountInfo) -> Result<NFTData, ProgramError> {
+        let md: NFTData =
             try_from_slice_checked(&a.data.borrow_mut(), MAX_DATA_SIZE)?;
 
         Ok(md)

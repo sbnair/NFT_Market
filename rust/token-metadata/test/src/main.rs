@@ -5,11 +5,11 @@ use {
     metaplex_token_metadata::{
         instruction::{
             create_metadata_accounts,
-            update_hero_price,
-            purchase_hero,
+            update_nft_price,
+            purchase_nft,
         },
         state::{
-            HeroData, PREFIX,
+            NFTData, PREFIX,
             // MAX_SYMBOL_LENGTH, MAX_NAME_LENGTH, MAX_URI_LENGTH,
         },
     },
@@ -547,7 +547,7 @@ fn create_metadata_account_call(
     app_matches: &ArgMatches,
     payer: Keypair,
     client: RpcClient,
-) -> (HeroData, Pubkey) {
+) -> (NFTData, Pubkey) {
     // let update_authority = read_keypair_file(
     //     app_matches
     //         .value_of("update_authority")
@@ -615,8 +615,8 @@ fn create_metadata_account_call(
     transaction.sign(&signers, recent_blockhash);
     client.send_and_confirm_transaction(&transaction).unwrap();
     let account = client.get_account(&metadata_key).unwrap();
-    let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
-    println!("---> Retrived Hero Data: {}", metadata.name);
+    let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
+    println!("---> Retrived NFT Data: {}", metadata.name);
     (metadata, metadata_key)
 }
 
@@ -624,7 +624,7 @@ fn update_metadata_account_call(
     app_matches: &ArgMatches,
     payer: Keypair,
     client: RpcClient,
-) -> (HeroData, Pubkey) {
+) -> (NFTData, Pubkey) {
     let program_key = metaplex_token_metadata::id();
     println!("--->Program_id: {}\n", program_key);
 
@@ -638,7 +638,7 @@ fn update_metadata_account_call(
     println!("---> Get hero account from id: {}", metadata_key);
     
     let account = client.get_account(&metadata_key).unwrap();
-    let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
+    let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
     println!("---> Retrived Hero Data: name-{}, price-{}", metadata.name, metadata.listed_price);
 
     let filter1 = RpcFilterType::Memcmp(Memcmp {
@@ -687,7 +687,7 @@ fn update_metadata_account_call(
 
     let mut instructions = vec![];
 
-    let new_metadata_instruction = update_hero_price(
+    let new_metadata_instruction = update_nft_price(
         program_key,
         metadata_key,
         id,
@@ -705,7 +705,7 @@ fn update_metadata_account_call(
     client.send_and_confirm_transaction(&transaction).unwrap();
 
     let account = client.get_account(&metadata_key).unwrap();
-    let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
+    let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
     println!("---> Updated Hero Data: name-{} new_price-{}", metadata.name, metadata.listed_price);
     (metadata, metadata_key)
 }
@@ -718,8 +718,8 @@ fn get_all_heros(
     println!("--> Saved program accounts: {}", accounts.len());
 
     for (pubkey, account) in accounts {
-        println!("hero_account: {:?}", pubkey);
-        let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
+        println!("nft_account: {:?}", pubkey);
+        let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
         println!("data: {:?}", metadata);
     }
 }
@@ -756,7 +756,7 @@ fn purchase_hero_call(
     app_matches: &ArgMatches,
     payer: Keypair,
     client: RpcClient,
-) -> (HeroData, Pubkey) {
+) -> (NFTData, Pubkey) {
     let program_key = metaplex_token_metadata::id();
     println!("--->Program_id: {}\n", program_key);
 
@@ -791,8 +791,8 @@ fn purchase_hero_call(
     println!("---> Get hero account from id: {}", metadata_key);
     
     let account = client.get_account(&metadata_key).unwrap();
-    let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
-    println!("---> Retrived Hero Data: name-{}, price-{}, owner_nft_account-{}", metadata.name, metadata.listed_price, metadata.owner_nft_address);
+    let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
+    println!("---> Retrived NFT Data: name-{}, price-{}, owner_nft_account-{}", metadata.name, metadata.listed_price, metadata.owner_nft_address);
     
     let filter1 = RpcFilterType::Memcmp(Memcmp {
         offset: 0,
@@ -839,7 +839,7 @@ fn purchase_hero_call(
 
     let mut instructions = vec![];
 
-    let new_metadata_instruction = purchase_hero(
+    let new_metadata_instruction = purchase_nft(
         program_key,
         metadata_key,
         id,
@@ -862,8 +862,8 @@ fn purchase_hero_call(
     client.send_and_confirm_transaction(&transaction).unwrap();
 
     let account = client.get_account(&metadata_key).unwrap();
-    let metadata: HeroData = try_from_slice_unchecked(&account.data).unwrap();
-    println!("---> Updated Hero Data: name-{} new_owner-{}", metadata.name, metadata.owner_nft_address);
+    let metadata: NFTData = try_from_slice_unchecked(&account.data).unwrap();
+    println!("---> Updated NFT Data: name-{} new_owner-{}", metadata.name, metadata.owner_nft_address);
     (metadata, metadata_key)
 }
 

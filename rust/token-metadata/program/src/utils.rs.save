@@ -971,7 +971,7 @@ pub fn process_purchase_nft_logic(
 
     msg!("--> Transfer {} lamports to the new account", nftdata.listed_price);
     invoke(
-        &system_instruction::transfer(&payer_account_info.key, &nft_owner_address_info.key, nftdata.listed_price as u64),
+        &system_instruction::transfer(&payer_account_info.key, &nft_owner_address_info.key, herodata.listed_price as u64),
         &[
             payer_account_info.clone(),
             nft_owner_address_info.clone(),
