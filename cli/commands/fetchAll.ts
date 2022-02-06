@@ -17,17 +17,17 @@ import log from 'loglevel';
 */
 export async function getAllNFTs(
   connection: Connection,
-  heroProgramAddress: string,
+  nftProgramAddress: string,
 ) {
   const result = await getProgramAccounts(
     connection,
-    heroProgramAddress,
+    nftProgramAddress,
     {},
   );
   log.info(`Fetched test counts: ${result.length}`);
-  let heroList = [];
-  for(let hero of result) {
-    const decoded = await decodeNFTMetadata(hero.account.data);
+  let nftList = [];
+  for(let nft of result) {
+    const decoded = await decodeNFTMetadata(nft.account.data);
     let metadata = {};
     metadata['id'] = decoded.id;
     metadata['lastPrice'] = decoded.lastPrice.toString();
@@ -39,13 +39,13 @@ export async function getAllNFTs(
     metadata['name'] = name.toString();
     metadata['uri'] = uri.toString();
     metadata['ownerNftAddress'] = (new PublicKey(decoded.ownerNftAddress)).toBase58();
-    const accountPubkey = hero.pubkey;
-    heroList.push({
+    const accountPubkey = nft.pubkey;
+    nftList.push({
       pubkey: accountPubkey,
       data: metadata,
     });
   };
-  return heroList;
+  return nftList;
 }
 
 export async function getProgramAccounts(
@@ -102,8 +102,8 @@ export async function getProgramAccounts(
   return data;
 }
 
-export async function decodeHeroMetadata(buffer) {
-  return borsh.deserializeUnchecked(METADATA_SCHEMA, Herodata, buffer);
+export async function decodeNFTMetadata(buffer) {
+  return borsh.deserializeUnchecked(METADATA_SCHEMA, NFTdata, buffer);
 }
 
 export async function decodeMetadata(buffer) {

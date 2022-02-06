@@ -13,7 +13,7 @@ import {
 } from '../helpers/schema';
 import { serialize } from 'borsh';
 import { TOKEN_PROGRAM_ID } from '../helpers/constants';
-import { getProgramAccounts, decodeHeroMetadata } from './fetchAll';
+import { getProgramAccounts, decodeNFTMetadata } from './fetchAll';
 import { AccountLayout, u64 } from '@solana/spl-token';
 import {
   Keypair,

@@ -9,7 +9,7 @@ import {
   getTokenWallet,
   getMetadata,
   getMasterEdition,
-  getHeroDataKey,
+  getNFTDataKey,
 } from '../helpers/accounts';
 import * as anchor from '@project-serum/anchor';
 import {
@@ -128,7 +128,7 @@ export const purchaseNFT = async (
   let txnData = Buffer.from(
     serialize(
       METADATA_SCHEMA,
-      new PurchaseHeroArgs({
+      new PurchaseNFTArgs({
         id,
         name: new_name ? new_name : null,
         uri: new_uri ? new_uri : null,
@@ -170,7 +170,7 @@ export const purchaseNFT = async (
 
   let name = Buffer.from(nftData.name);
   name = name.slice(0, name.indexOf(0));
-  let uri = Buffer.from(heroData.uri);
+  let uri = Buffer.from(nftData.uri);
   uri = uri.slice(0, uri.indexOf(0));
 
   let metadata = {
