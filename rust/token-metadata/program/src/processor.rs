@@ -183,36 +183,36 @@ pub fn process_update_nft_price(
     Ok(())
 }
 
-// pub fn process_sign_metadata(program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
-//     let account_info_iter = &mut accounts.iter();
+ pub fn process_sign_metadata(program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
+     let account_info_iter = &mut accounts.iter();
 
-//     let metadata_info = next_account_info(account_info_iter)?;
-//     let creator_info = next_account_info(account_info_iter)?;
+     let metadata_info = next_account_info(account_info_iter)?;
+     let creator_info = next_account_info(account_info_iter)?;
 
-//     assert_signer(creator_info)?;
-//     assert_owned_by(metadata_info, program_id)?;
+     assert_signer(creator_info)?;
+     assert_owned_by(metadata_info, program_id)?;
 
-//     let mut metadata = HeroData::from_account_info(metadata_info)?;
+     let mut metadata = HeroData::from_account_info(metadata_info)?;
 
-//     // if let Some(creators) = &mut metadata.data.creators {
-//     //     let mut found = false;
-//     //     for creator in creators {
-//     //         if creator.address == *creator_info.key {
-//     //             creator.verified = true;
-//     //             found = true;
-//     //             break;
-//     //         }
-//     //     }
-//     //     if !found {
-//     //         return Err(MetadataError::CreatorNotFound.into());
-//     //     }
-//     // } else {
-//     //     return Err(MetadataError::NoCreatorsPresentOnMetadata.into());
-//     // }
-//     metadata.serialize(&mut *metadata_info.data.borrow_mut())?;
+      if let Some(creators) = &mut metadata.data.creators {
+          let mut found = false;
+          for creator in creators {
+              if creator.address == *creator_info.key {
+                  creator.verified = true;
+                  found = true;
+                  break;
+              }
+          }
+          if !found {
+              return Err(MetadataError::CreatorNotFound.into());
+          }
+      } else {
+          return Err(MetadataError::NoCreatorsPresentOnMetadata.into());
+      }
+     metadata.serialize(&mut *metadata_info.data.borrow_mut())?;
 
-//     Ok(())
-// }
+     Ok(())
+ }
 
 // / Puff out the variable length fields to a fixed length on a metadata
 // / account in a permissionless way.
