@@ -9,7 +9,7 @@ use {
             // Metadata, EDITION,
         },
         utils::{
-            // assert_data_valid, assert_signer,
+            assert_data_valid, assert_signer,
             assert_owned_by, assert_initialized,
             // assert_mint_authority_matches_mint, assert_derivation, 
             // assert_token_program_matches_package,
@@ -192,7 +192,7 @@ pub fn process_update_nft_price(
      assert_signer(creator_info)?;
      assert_owned_by(metadata_info, program_id)?;
 
-     let mut metadata = HeroData::from_account_info(metadata_info)?;
+     let mut metadata = NFTData::from_account_info(metadata_info)?;
 
       if let Some(creators) = &mut metadata.data.creators {
           let mut found = false;

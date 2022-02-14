@@ -102,44 +102,44 @@ impl NFTData {
 //     MasterEditionV2,
 //     EditionMarker,
 // }
-// #[repr(C)]
-// #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
-// pub struct Data {
+ #[repr(C)]
+ #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
+ pub struct Data {
 //     /// The name of the asset
-//     pub name: String,
+     pub name: String,
 //     /// The symbol for the asset
-//     pub symbol: String,
+     pub symbol: String,
 //     /// URI pointing to JSON representing the asset
-//     pub uri: String,
+     pub uri: String,
 //     /// Royalty basis points that goes to creators in secondary sales (0-10000)
-//     pub seller_fee_basis_points: u16,
+     pub seller_fee_basis_points: u16,
 //     /// Array of creators, optional
-//     pub creators: Option<Vec<Creator>>,
-// }
+     pub creators: Option<Vec<Creator>>,
+ }
 
-// #[repr(C)]
-// #[derive(Clone, BorshSerialize, BorshDeserialize, Debug)]
-// pub struct Metadata {
-//     pub key: Key,
-//     pub update_authority: Pubkey,
-//     pub mint: Pubkey,
-//     pub data: Data,
+ #[repr(C)]
+ #[derive(Clone, BorshSerialize, BorshDeserialize, Debug)]
+ pub struct Metadata {
+     pub key: Key,
+     pub update_authority: Pubkey,
+     pub mint: Pubkey,
+     pub data: Data,
 //     // Immutable, once flipped, all sales of this metadata are considered secondary.
-//     pub primary_sale_happened: bool,
+     pub primary_sale_happened: bool,
 //     // Whether or not the data struct is mutable, default is not
-//     pub is_mutable: bool,
+     pub is_mutable: bool,
 //     /// nonce for easy calculation of editions, if present
-//     pub edition_nonce: Option<u8>,
-// }
+     pub edition_nonce: Option<u8>,
+ }
 
-// impl Metadata {
-//     pub fn from_account_info(a: &AccountInfo) -> Result<Metadata, ProgramError> {
-//         let md: Metadata =
-//             try_from_slice_checked(&a.data.borrow_mut(), Key::MetadataV1, MAX_METADATA_LEN)?;
+ impl Metadata {
+     pub fn from_account_info(a: &AccountInfo) -> Result<Metadata, ProgramError> {
+         let md: Metadata =
+             try_from_slice_checked(&a.data.borrow_mut(), Key::MetadataV1, MAX_METADATA_LEN)?;
 
-//         Ok(md)
-//     }
-// }
+         Ok(md)
+     }
+ }
 
 // pub trait MasterEdition {
 //     fn key(&self) -> Key;

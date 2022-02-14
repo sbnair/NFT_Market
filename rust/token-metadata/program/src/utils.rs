@@ -733,25 +733,25 @@ pub struct TokenMintToParams<'a: 'b, 'b> {
     pub token_program: AccountInfo<'a>,
 }
 
-// pub fn assert_derivation(
-//     program_id: &Pubkey,
-//     account: &AccountInfo,
-//     path: &[&[u8]],
-// ) -> Result<u8, ProgramError> {
-//     let (key, bump) = Pubkey::find_program_address(&path, program_id);
-//     if key != *account.key {
-//         return Err(MetadataError::DerivedKeyInvalid.into());
-//     }
-//     Ok(bump)
-// }
+ pub fn assert_derivation(
+     program_id: &Pubkey,
+     account: &AccountInfo,
+     path: &[&[u8]],
+ ) -> Result<u8, ProgramError> {
+     let (key, bump) = Pubkey::find_program_address(&path, program_id);
+     if key != *account.key {
+         return Err(MetadataError::DerivedKeyInvalid.into());
+     }
+     Ok(bump)
+ }
 
-// pub fn assert_signer(account_info: &AccountInfo) -> ProgramResult {
-//     if !account_info.is_signer {
-//         Err(ProgramError::MissingRequiredSignature)
-//     } else {
-//         Ok(())
-//     }
-// }
+ pub fn assert_signer(account_info: &AccountInfo) -> ProgramResult {
+     if !account_info.is_signer {
+         Err(ProgramError::MissingRequiredSignature)
+     } else {
+         Ok(())
+     }
+ }
 
 pub fn assert_owned_by(account: &AccountInfo, owner: &Pubkey) -> ProgramResult {
     if account.owner != owner {
