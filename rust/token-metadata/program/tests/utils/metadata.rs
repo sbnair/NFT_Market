@@ -69,28 +69,28 @@
          )
          .await?;
 
-         let tx = Transaction::new_signed_with_payer(
-             &[instruction::create_metadata_accounts(
-                 id(),
-                 self.pubkey.clone(),
-                 self.mint.pubkey(),
-                 context.payer.pubkey().clone(),
-                 context.payer.pubkey().clone(),
-                 context.payer.pubkey().clone(),
-                 name,
-                 symbol,
-                 uri,
-                 creators,
-                 seller_fee_basis_points,
-                 false,
-                 is_mutable,
-             )],
-             Some(&context.payer.pubkey()),
-             &[&context.payer],
-             context.last_blockhash,
-         );
+       //  let tx = Transaction::new_signed_with_payer(
+         //    &[instruction::create_metadata_accounts(
+           //      id(),
+             //    self.pubkey.clone(),
+            //     self.mint.pubkey(),
+            //     context.payer.pubkey().clone(),
+            //     context.payer.pubkey().clone(),
+           //      context.payer.pubkey().clone(),
+          //       name,
+         //        symbol,
+          //       uri,
+            //     creators,
+            //     seller_fee_basis_points,
+           //      false,
+          //       is_mutable,
+          //   )],
+//             Some(&context.payer.pubkey()),
+  //           &[&context.payer],
+    //         context.last_blockhash,
+      //   );
 
-         Ok(context.banks_client.process_transaction(tx).await?)
+       //  Ok(context.banks_client.process_transaction(tx).await?)
      }
 
 //     // pub async fn update_primary_sale_happened_via_token(
