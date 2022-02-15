@@ -20,7 +20,7 @@ pub const MAX_NAME_LENGTH: usize = 32;
 
 pub const MAX_URI_LENGTH: usize = 200;
 
-// pub const MAX_METADATA_LEN: usize = 1 + 32 + 32 + MAX_DATA_SIZE + 1 + 1 + 9 + 172;
+pub const MAX_METADATA_LEN: usize = 1 + 32 + 32 + MAX_DATA_SIZE + 1 + 1 + 9 + 172;
 
 pub const MAX_DATA_SIZE: usize =
     1
@@ -90,18 +90,18 @@ impl NFTData {
         Ok(md)
     }
 }
-// #[repr(C)]
-// #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, Copy)]
-// pub enum Key {
-//     Uninitialized,
-//     EditionV1,
-//     MasterEditionV1,
-//     ReservationListV1,
-//     MetadataV1,
-//     ReservationListV2,
-//     MasterEditionV2,
-//     EditionMarker,
-// }
+ #[repr(C)]
+ #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, Copy)]
+ pub enum Key {
+     Uninitialized,
+     EditionV1,
+     MasterEditionV1,
+     ReservationListV1,
+     MetadataV1,
+     ReservationListV2,
+     MasterEditionV2,
+     EditionMarker,
+ }
  #[repr(C)]
  #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
  pub struct Data {
@@ -135,7 +135,7 @@ impl NFTData {
  impl Metadata {
      pub fn from_account_info(a: &AccountInfo) -> Result<Metadata, ProgramError> {
          let md: Metadata =
-             try_from_slice_checked(&a.data.borrow_mut(), Key::MetadataV1, MAX_METADATA_LEN)?;
+             try_from_slice_checked(&a.data.borrow_mut(),  MAX_METADATA_LEN)?;
 
          Ok(md)
      }
@@ -290,14 +290,14 @@ impl NFTData {
 //     }
 // }
 
-// #[repr(C)]
-// #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
-// pub struct Creator {
-//     pub address: Pubkey,
-//     pub verified: bool,
+ #[repr(C)]
+ #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
+ pub struct Creator {
+     pub address: Pubkey,
+     pub verified: bool,
 //     // In percentages, NOT basis points ;) Watch out!
-//     pub share: u8,
-// }
+     pub share: u8,
+ }
 
 // pub trait ReservationList {
 //     fn master_edition(&self) -> Pubkey;
