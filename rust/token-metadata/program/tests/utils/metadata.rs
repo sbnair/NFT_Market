@@ -41,33 +41,33 @@
          try_from_slice_unchecked(&account.data).unwrap()
      }
 
-     pub async fn create(
-         &self,
-         context: &mut ProgramTestContext,
-         name: String,
-         symbol: String,
-         uri: String,
-         creators: Option<Vec<Creator>>,
-         seller_fee_basis_points: u16,
-         is_mutable: bool,
-     ) -> transport::Result<()> {
-         create_mint(context, &self.mint, &context.payer.pubkey(), None).await?;
-         create_token_account(
-             context,
-             &self.token,
-             &self.mint.pubkey(),
-             &context.payer.pubkey(),
-         )
-         .await?;
-         mint_tokens(
-             context,
-             &self.mint.pubkey(),
-             &self.token.pubkey(),
-             1,
-             &context.payer.pubkey(),
-             None,
-         )
-         .await?;
+   //  pub async fn create(
+       //  &self,
+       //  context: &mut ProgramTestContext,
+       //  name: String,
+       //  symbol: String,
+       //  uri: String,
+       //  creators: Option<Vec<Creator>>,
+       //  seller_fee_basis_points: u16,
+     //    is_mutable: bool,
+   //  ) -> String {
+       //  create_mint(context, &self.mint, &context.payer.pubkey(), None).await?;
+        // create_token_account(
+         //    context,
+         //    &self.token,
+         //    &self.mint.pubkey(),
+         //    &context.payer.pubkey(),
+       //  )
+       //  .await?;
+       //  mint_tokens(
+         //    context,
+         //    &self.mint.pubkey(),
+          //   &self.token.pubkey(),
+          //   1,
+          //   &context.payer.pubkey(),
+        //     None,
+      //   )
+     //    .await?;
 
        //  let tx = Transaction::new_signed_with_payer(
          //    &[instruction::create_metadata_accounts(
@@ -91,7 +91,7 @@
       //   );
 
        //  Ok(context.banks_client.process_transaction(tx).await?)
-     }
+   //  }
 
 //     // pub async fn update_primary_sale_happened_via_token(
 //     //     &self,
